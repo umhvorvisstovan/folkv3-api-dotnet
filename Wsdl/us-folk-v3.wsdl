@@ -1,0 +1,1326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+		xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+		xmlns:wsdl="http://www.w3.org/ns/wsdl"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+		xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+		xmlns:xrd="http://x-road.eu/xsd/xroad.xsd"
+		xmlns:tns="http://us-folk-v3.x-road.eu/producer"
+		targetNamespace="http://us-folk-v3.x-road.eu/producer">
+	<types>
+		<schema targetNamespace="http://us-folk-v3.x-road.eu/producer" xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://x-road.eu/xsd/xroad.xsd" schemaLocation="http://x-road.eu/xsd/xroad.xsd"/>
+			<import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="http://www.w3.org/2005/05/xmlmime"/>
+            
+            <!--       -->
+            <!-- Model -->
+            <!--       -->
+            
+            <!-- Address -->
+            <complexType name="Address">
+                <sequence>
+                    <element name="streetAndNumbers" type="string"/>
+                    <element name="street" type="string"/>
+                    <element name="houseNumber" type="tns:HouseNumber"/>
+                    <element name="apartment" type="string"/>
+                    <element name="postalCode" type="string"/>
+                    <element name="city" type="string"/>
+                    <element name="country" type="tns:Country"/>
+					<element name="from" type="string"/>
+                </sequence>
+            </complexType>
+
+            <!-- AddressParam -->
+            <complexType name="AddressParam">
+                <sequence>
+                    <element name="street" type="string"/>
+                    <element name="houseNumber" type="tns:HouseNumber"/>
+                    <element name="city" type="string"/>
+                </sequence>
+            </complexType>
+
+			<!-- Changes -->
+            <complexType name="ChangesBase">
+                <sequence>
+                    <element name="from" type="string"/>
+                    <element name="to" type="string"/>
+                </sequence>
+            </complexType>
+			<complexType name="ChangesParam">
+				<sequence>
+					<element name="from" type="string"/>
+					<element name="to" type="string"/>
+				</sequence>
+			</complexType>
+
+			<!-- CommunityPerson -->
+            <complexType name="CommunityPerson">
+                <sequence>
+                    <element name="status" type="string"/>
+                    <element name="person" type="tns:PersonSmall"/>
+                    <element name="existingId" type="tns:PrivateId"/>
+                </sequence>
+            </complexType>
+
+            <!-- CivilStatus -->
+            <complexType name="CivilStatus">
+                <sequence>
+                    <element name="type" type="string"/>
+                    <element name="from" type="string"/>
+                </sequence>
+            </complexType>
+
+            <!-- Country -->
+            <complexType name="Country">
+                <sequence>
+                    <element name="code" type="string"/>
+                    <element name="nameFo" type="string"/>
+                    <element name="nameEn" type="string"/>
+                </sequence>
+            </complexType>
+
+            <!-- ForeignSsn -->
+            <complexType name="ForeignSsn">
+                <sequence>
+                    <element name="value" type="string"/>
+                    <element name="country" type="tns:Country"/>
+                </sequence>
+            </complexType>
+            <complexType name="ForeignSsnList">
+                <sequence>
+                    <element name="foreignSsn" type="tns:ForeignSsn" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+
+            <!-- HouseNumber -->
+            <complexType name="HouseNumber">
+                <sequence>
+                    <element name="number" type="int"/>
+                    <element name="buildingCode" type="string"/>
+                </sequence>
+            </complexType>
+
+            <!-- Incapacity -->
+            <complexType name="Incapacity">
+                <sequence>
+                    <element name="guardian1" type="tns:Guardian"/>
+                    <element name="guardian2" type="tns:Guardian" minOccurs="0"/>
+                </sequence>
+            </complexType>
+
+            <!-- Guardian -->
+            <complexType name="Guardian">
+                <sequence>
+                    <element name="name" type="tns:PersonName"/>
+                    <element name="address" type="tns:Address"/>
+                </sequence>
+            </complexType>
+
+            <!-- NameParam -->
+            <complexType name="NameParam">
+                <sequence>
+                    <element name="first" type="string"/>
+                    <element name="last" type="string"/>
+                </sequence>
+            </complexType>
+
+            <!-- NameAndAddressParam -->
+            <complexType name="NameAndAddressParam">
+                <sequence>
+                    <element name="name" type="tns:NameParam"/>
+                    <element name="address" type="tns:AddressParam"/>
+                </sequence>
+            </complexType>
+            <complexType name="NameAndAddressParamList">
+                <sequence>
+                    <element name="param" type="tns:NameAndAddressParam" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+
+            <!-- NameAndDateOfBirthParam -->
+            <complexType name="NameAndDateOfBirthParam">
+                <sequence>
+                    <element name="name" type="tns:NameParam"/>
+                    <element name="dateOfBirth" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="NameAndDateOfBirthParamList">
+                <sequence>
+                    <element name="param" type="tns:NameAndDateOfBirthParam" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+
+            <!-- PersonName -->
+            <complexType name="PersonName">
+                <sequence>
+                    <element name="first" type="string"/>
+                    <element name="middle" type="string"/>
+                    <element name="last" type="string"/>
+                    <element name="official" type="string"/>
+                </sequence>
+            </complexType>
+
+            <!-- PersonSmall -->
+            <complexType name="PersonSmall">
+                <sequence>
+                    <element name="privateId" type="tns:PrivateId"/>
+                    <element name="name" type="tns:PersonName"/>
+                    <element name="gender" type="string"/>
+                    <element name="address" type="tns:Address"/>
+                    <element name="placeOfBirth" type="string"/>
+                    <element name="incapacity" type="tns:Incapacity"/>
+                    <element name="specialMarks" type="tns:SpecialMarks"/>
+                    <element name="dateOfDeath" type="string"/>
+		        </sequence>
+            </complexType>
+            
+            <!-- PersonMedium -->
+            <complexType name="PersonMedium">
+                <complexContent>
+                    <extension base="tns:PersonSmall">
+		                <sequence>
+		                    <element name="publicId" type="tns:PublicId"/>
+                            <element name="ptal" type="string"/>
+                            <element name="dateOfBirth" type="string"/>
+		                    <element name="civilStatus" type="tns:CivilStatus"/>
+		                </sequence>
+		            </extension>
+		        </complexContent>
+            </complexType>
+
+            <!-- PrivateId -->
+            <complexType name="PrivateId">
+                <sequence>
+                    <element name="value" type="int"/>
+                </sequence>
+            </complexType>
+            <complexType name="PrivateIdList">
+                <sequence>
+                    <element name="id" type="tns:PrivateId" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+
+            <!-- PrivateChanges -->
+            <complexType name="PrivateChanges">
+                <complexContent>
+                    <extension base="tns:ChangesBase">
+		                <sequence>
+		                    <element name="ids" type="tns:PrivateIdList"/>
+        		        </sequence>
+        		    </extension>
+        		</complexContent>
+            </complexType>
+
+            <!-- PublicId -->
+            <complexType name="PublicId">
+                <sequence>
+                    <element name="value" type="int"/>
+                </sequence>
+            </complexType>
+            <element name="PublicId" type="int"/>
+            <complexType name="PublicIdList">
+                <sequence>
+                    <element name="id" type="tns:PublicId" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+			<complexType name="PublicIdListResponse">
+                <complexContent>
+                    <extension base="tns:ResponseBase">
+                        <sequence>
+                            <element name="result" type="tns:PublicIdList"/>
+                        </sequence>
+                    </extension>
+                </complexContent>
+			</complexType>
+
+            <!-- PublicChanges -->
+            <complexType name="PublicChanges">
+                <complexContent>
+                    <extension base="tns:ChangesBase">
+		                <sequence>
+		                    <element name="ids" type="tns:PublicIdList"/>
+		                </sequence>
+		            </extension>
+		        </complexContent>
+            </complexType>
+
+            <!-- SpecialMarks -->
+            <complexType name="SpecialMarks">
+                <sequence>
+                    <element name="type" type="string" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+
+            <!-- SystemStatusEntry -->
+            <complexType name="SystemStatus">
+                <sequence>
+                    <element name="name" type="string"/>
+                    <element name="value" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="SystemStatusList">
+                <sequence>
+                    <element name="systemStatus" type="tns:SystemStatus" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+
+
+            <!--         -->
+            <!-- Methods -->
+            <!--         -->
+
+            <!-- ResponseBase -->
+            <complexType name="ResponseBase">
+                <sequence>
+                    <element name="status" type="string"/>
+                    <element name="message" type="string"/>
+                </sequence>
+            </complexType>
+
+			<!-- Privileges -->
+
+            <complexType name="PrivilegeList">
+                <sequence>
+                    <element name="privilege" type="string" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="PrivilegesResponse">
+                <complexContent>
+                    <extension base="tns:ResponseBase">
+                        <sequence>
+                            <element name="result" type="tns:PrivilegeList"/>
+                        </sequence>
+                    </extension>
+                </complexContent>
+            </complexType>
+
+        	<element name="GetMyPrivileges">
+				<complexType>
+					<sequence>
+						<element name="request"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetMyPrivilegesResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PrivilegesResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPrivilegesSmall">
+				<complexType>
+					<sequence>
+						<element name="request"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPrivilegesSmallResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PrivilegesResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPrivilegesMedium">
+				<complexType>
+					<sequence>
+						<element name="request"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPrivilegesMediumResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PrivilegesResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+
+            <!-- PersonSmall -->
+
+            <complexType name="PersonSmallResponse">
+                <complexContent>
+                    <extension base="tns:ResponseBase">
+                        <sequence>
+                            <element name="result" type="tns:PersonSmall"/>
+                        </sequence>
+                    </extension>
+                </complexContent>
+            </complexType>
+
+        	<element name="GetPersonSmallByPrivateId">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:PrivateId"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonSmallByPrivateIdResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonSmallResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonSmallByPtal">
+				<complexType>
+					<sequence>
+						<element name="request" type="string"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonSmallByPtalResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonSmallResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonSmallByNameAndAddress">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:NameAndAddressParam"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonSmallByNameAndAddressResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonSmallResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonSmallByNameAndDateOfBirth">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:NameAndDateOfBirthParam"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonSmallByNameAndDateOfBirthResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonSmallResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+
+            <!-- PersonMedium -->
+
+            <complexType name="PersonMediumResponse">
+                <complexContent>
+                    <extension base="tns:ResponseBase">
+                        <sequence>
+                            <element name="result" type="tns:PersonMedium"/>
+                        </sequence>
+                    </extension>
+                </complexContent>
+            </complexType>
+
+        	<element name="GetPersonMediumByPrivateId">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:PrivateId"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonMediumByPrivateIdResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonMediumResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonMediumByPublicId">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:PublicId"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonMediumByPublicIdResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonMediumResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonMediumByPtal">
+				<complexType>
+					<sequence>
+						<element name="request" type="string"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonMediumByPtalResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonMediumResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonMediumByNameAndAddress">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:NameAndAddressParam"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonMediumByNameAndAddressResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonMediumResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="GetPersonMediumByNameAndDateOfBirth">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:NameAndDateOfBirthParam"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="GetPersonMediumByNameAndDateOfBirthResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:PersonMediumResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+
+            <!-- Changes -->
+
+        	<element name="GetPrivateChanges">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:ChangesParam"/>
+					</sequence>
+				</complexType>
+            </element>
+			<element name="GetPrivateChangesResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:ResponseBase">
+                            <sequence>
+                                <element name="result" type="tns:PrivateChanges"/>
+                            </sequence>
+                        </extension>
+                    </complexContent>
+                </complexType>
+			</element>
+            
+
+        	<element name="GetPublicChanges">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:ChangesParam"/>
+					</sequence>
+				</complexType>
+            </element>
+			<element name="GetPublicChangesResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:ResponseBase">
+                            <sequence>
+                                <element name="result" type="tns:PublicChanges"/>
+                            </sequence>
+                        </extension>
+                    </complexContent>
+                </complexType>
+			</element>
+
+
+            <!-- Community -->
+
+            <complexType name="CommunityPersonResponse">
+                <complexContent>
+                    <extension base="tns:ResponseBase">
+                        <sequence>
+                            <element name="result" type="tns:CommunityPerson"/>
+                        </sequence>
+                    </extension>
+                </complexContent>
+            </complexType>
+ 
+        	<element name="AddPersonToCommunityByNameAndAddress">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:NameAndAddressParam"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="AddPersonToCommunityByNameAndAddressResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:CommunityPersonResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="AddPersonToCommunityByNameAndDateOfBirth">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:NameAndDateOfBirthParam"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="AddPersonToCommunityByNameAndDateOfBirthResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:CommunityPersonResponse"/>
+                    </complexContent>
+                </complexType>
+            </element>
+
+        	<element name="RemovePersonsFromCommunity">
+				<complexType>
+					<sequence>
+						<element name="request" type="tns:PrivateIdList"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="RemovePersonsFromCommunityResponse">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:ResponseBase">
+                            <sequence>
+                                <element name="result" type="tns:PrivateIdList"/>
+                            </sequence>
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+
+
+			<!-- System -->
+			
+            <!-- SystemStatus -->
+
+        	<element name="GetSystemStatus">
+				<complexType>
+					<sequence>
+						<element name="request"/>
+					</sequence>
+				</complexType>
+            </element>
+			<element name="GetSystemStatusResponse">
+				<complexType>
+                    <complexContent>
+                        <extension base="tns:ResponseBase">
+                            <sequence>
+                                <element name="result" type="tns:SystemStatusList"/>
+                            </sequence>
+                        </extension>
+                    </complexContent>
+				</complexType>
+			</element>
+
+            
+            <!-- RefreshConsumer -->
+
+        	<element name="RefreshConsumer">
+				<complexType>
+					<sequence>
+						<element name="request"/>
+					</sequence>
+				</complexType>
+            </element>
+            <element name="RefreshConsumerResponse">
+				<complexType>
+                    <complexContent>
+                        <extension base="tns:ResponseBase">
+                            <sequence>
+                                <element name="result" type="string"/>
+                            </sequence>
+                        </extension>
+                    </complexContent>
+				</complexType> 
+            </element>
+
+		</schema>
+	</types>
+
+    <!-- Privileges -->
+    <message name="GetMyPrivileges">
+        <part name="body" element="tns:GetMyPrivileges"/>
+    </message>
+    <message name="GetMyPrivilegesResponse">
+        <part name="body" element="tns:GetMyPrivilegesResponse"/>
+    </message>
+    <message name="GetPrivilegesSmall">
+        <part name="body" element="tns:GetPrivilegesSmall"/>
+    </message>
+    <message name="GetPrivilegesSmallResponse">
+        <part name="body" element="tns:GetPrivilegesSmallResponse"/>
+    </message>
+    <message name="GetPrivilegesMedium">
+        <part name="body" element="tns:GetPrivilegesMedium"/>
+    </message>
+    <message name="GetPrivilegesMediumResponse">
+        <part name="body" element="tns:GetPrivilegesMediumResponse"/>
+    </message>
+	<!-- PersonSmall -->
+    <message name="GetPersonSmallByPrivateId">
+        <part name="body" element="tns:GetPersonSmallByPrivateId"/>
+    </message>
+    <message name="GetPersonSmallByPrivateIdResponse">
+        <part name="body" element="tns:GetPersonSmallByPrivateIdResponse"/>
+    </message>
+    <message name="GetPersonSmallByPtal">
+        <part name="body" element="tns:GetPersonSmallByPtal"/>
+    </message>
+    <message name="GetPersonSmallByPtalResponse">
+        <part name="body" element="tns:GetPersonSmallByPtalResponse"/>
+    </message>
+    <message name="GetPersonSmallByNameAndAddress">
+        <part name="body" element="tns:GetPersonSmallByNameAndAddress"/>
+    </message>
+    <message name="GetPersonSmallByNameAndAddressResponse">
+        <part name="body" element="tns:GetPersonSmallByNameAndAddressResponse"/>
+    </message>
+    <message name="GetPersonSmallByNameAndDateOfBirth">
+        <part name="body" element="tns:GetPersonSmallByNameAndDateOfBirth"/>
+    </message>
+    <message name="GetPersonSmallByNameAndDateOfBirthResponse">
+        <part name="body" element="tns:GetPersonSmallByNameAndDateOfBirthResponse"/>
+    </message>
+	<!-- PersonMedium -->
+    <message name="GetPersonMediumByPrivateId">
+        <part name="body" element="tns:GetPersonMediumByPrivateId"/>
+    </message>
+    <message name="GetPersonMediumByPrivateIdResponse">
+        <part name="body" element="tns:GetPersonMediumByPrivateIdResponse"/>
+    </message>
+    <message name="GetPersonMediumByPublicId">
+        <part name="body" element="tns:GetPersonMediumByPublicId"/>
+    </message>
+    <message name="GetPersonMediumByPublicIdResponse">
+        <part name="body" element="tns:GetPersonMediumByPublicIdResponse"/>
+    </message>
+    <message name="GetPersonMediumByPtal">
+        <part name="body" element="tns:GetPersonMediumByPtal"/>
+    </message>
+    <message name="GetPersonMediumByPtalResponse">
+        <part name="body" element="tns:GetPersonMediumByPtalResponse"/>
+    </message>
+    <message name="GetPersonMediumByNameAndAddress">
+        <part name="body" element="tns:GetPersonMediumByNameAndAddress"/>
+    </message>
+    <message name="GetPersonMediumByNameAndAddressResponse">
+        <part name="body" element="tns:GetPersonMediumByNameAndAddressResponse"/>
+    </message>
+    <message name="GetPersonMediumByNameAndDateOfBirth">
+        <part name="body" element="tns:GetPersonMediumByNameAndDateOfBirth"/>
+    </message>
+    <message name="GetPersonMediumByNameAndDateOfBirthResponse">
+        <part name="body" element="tns:GetPersonMediumByNameAndDateOfBirthResponse"/>
+    </message>
+	<!-- Changes -->
+    <message name="GetPrivateChanges">
+        <part name="body" element="tns:GetPrivateChanges"/>
+    </message>
+    <message name="GetPrivateChangesResponse">
+        <part name="body" element="tns:GetPrivateChangesResponse"/>
+    </message>
+    <message name="GetPublicChanges">
+        <part name="body" element="tns:GetPublicChanges"/>
+    </message>
+    <message name="GetPublicChangesResponse">
+        <part name="body" element="tns:GetPublicChangesResponse"/>
+    </message>
+    <!-- Community -->
+    <message name="AddPersonToCommunityByNameAndAddress">
+        <part name="body" element="tns:AddPersonToCommunityByNameAndAddress"/>
+    </message>
+    <message name="AddPersonToCommunityByNameAndAddressResponse">
+        <part name="body" element="tns:AddPersonToCommunityByNameAndAddressResponse"/>
+    </message>
+    <message name="AddPersonToCommunityByNameAndDateOfBirth">
+        <part name="body" element="tns:AddPersonToCommunityByNameAndDateOfBirth"/>
+    </message>
+    <message name="AddPersonToCommunityByNameAndDateOfBirthResponse">
+        <part name="body" element="tns:AddPersonToCommunityByNameAndDateOfBirthResponse"/>
+    </message>
+    <message name="RemovePersonsFromCommunity">
+        <part name="body" element="tns:RemovePersonsFromCommunity"/>
+    </message>
+    <message name="RemovePersonsFromCommunityResponse">
+        <part name="body" element="tns:RemovePersonsFromCommunityResponse"/>
+    </message>
+ 	<!-- System -->
+    <message name="GetSystemStatus">
+        <part name="body" element="tns:GetSystemStatus"/>
+    </message>
+    <message name="GetSystemStatusResponse">
+        <part name="body" element="tns:GetSystemStatusResponse"/>
+    </message>
+    <message name="RefreshConsumer">
+        <part name="body" element="tns:RefreshConsumer"/>
+    </message>
+    <message name="RefreshConsumerResponse">
+        <part name="body" element="tns:RefreshConsumerResponse"/>
+    </message>
+    
+    <message name="xrdheader">
+        <part name="client" element="xrd:client" />
+        <part name="service" element="xrd:service" />
+        <part name="id" element="xrd:id" />
+        <part name="userId" element="xrd:userId" />
+        <part name="issue" element="xrd:issue" />
+        <part name="protocolVersion" element="xrd:protocolVersion" />
+    </message>
+
+	<portType name="UsFolkPortType">
+		<!-- Privileges -->
+		<operation name="GetMyPrivileges">
+			<documentation><xrd:title>GetMyPrivileges</xrd:title></documentation>
+			<input message="tns:GetMyPrivileges"/>
+			<output message="tns:GetMyPrivilegesResponse"/>
+		</operation>
+		<operation name="GetPrivilegesSmall">
+			<documentation><xrd:title>GetPrivilegesSmall</xrd:title></documentation>
+			<input message="tns:GetPrivilegesSmall"/>
+			<output message="tns:GetPrivilegesSmallResponse"/>
+		</operation>
+		<operation name="GetPrivilegesMedium">
+			<documentation><xrd:title>GetPrivilegesMedium</xrd:title></documentation>
+			<input message="tns:GetPrivilegesMedium"/>
+			<output message="tns:GetPrivilegesMediumResponse"/>
+		</operation>
+		<!-- PersonSmall -->
+		<operation name="GetPersonSmallByPrivateId">
+			<documentation><xrd:title>GetPersonSmallByPrivateId</xrd:title></documentation>
+			<input message="tns:GetPersonSmallByPrivateId"/>
+			<output message="tns:GetPersonSmallByPrivateIdResponse"/>
+		</operation>
+		<operation name="GetPersonSmallByPtal">
+			<documentation><xrd:title>GetPersonSmallByPtal</xrd:title></documentation>
+			<input message="tns:GetPersonSmallByPtal"/>
+			<output message="tns:GetPersonSmallByPtalResponse"/>
+		</operation>
+		<operation name="GetPersonSmallByNameAndAddress">
+			<documentation><xrd:title>GetPersonSmallByNameAndAddress</xrd:title></documentation>
+			<input message="tns:GetPersonSmallByNameAndAddress"/>
+			<output message="tns:GetPersonSmallByNameAndAddressResponse"/>
+		</operation>
+		<operation name="GetPersonSmallByNameAndDateOfBirth">
+			<documentation><xrd:title>GetPersonSmallByNameAndDateOfBirth</xrd:title></documentation>
+			<input message="tns:GetPersonSmallByNameAndDateOfBirth"/>
+			<output message="tns:GetPersonSmallByNameAndDateOfBirthResponse"/>
+		</operation>
+		<!-- PersonMedium -->
+		<operation name="GetPersonMediumByPrivateId">
+			<documentation><xrd:title>GetPersonMediumByPrivateId</xrd:title></documentation>
+			<input message="tns:GetPersonMediumByPrivateId"/>
+			<output message="tns:GetPersonMediumByPrivateIdResponse"/>
+		</operation>
+		<operation name="GetPersonMediumByPublicId">
+			<documentation><xrd:title>GetPersonMediumByPublicId</xrd:title></documentation>
+			<input message="tns:GetPersonMediumByPublicId"/>
+			<output message="tns:GetPersonMediumByPublicIdResponse"/>
+		</operation>
+		<operation name="GetPersonMediumByPtal">
+			<documentation><xrd:title>GetPersonMediumByPtal</xrd:title></documentation>
+			<input message="tns:GetPersonMediumByPtal"/>
+			<output message="tns:GetPersonMediumByPtalResponse"/>
+		</operation>
+		<operation name="GetPersonMediumByNameAndAddress">
+			<documentation><xrd:title>GetPersonMediumByNameAndAddress</xrd:title></documentation>
+			<input message="tns:GetPersonMediumByNameAndAddress"/>
+			<output message="tns:GetPersonMediumByNameAndAddressResponse"/>
+		</operation>
+		<operation name="GetPersonMediumByNameAndDateOfBirth">
+			<documentation><xrd:title>GetPersonMediumByNameAndDateOfBirth</xrd:title></documentation>
+			<input message="tns:GetPersonMediumByNameAndDateOfBirth"/>
+			<output message="tns:GetPersonMediumByNameAndDateOfBirthResponse"/>
+		</operation>
+		<!-- Changes -->
+		<operation name="GetPrivateChanges">
+			<documentation><xrd:title>GetPrivateChanges</xrd:title></documentation>
+			<input message="tns:GetPrivateChanges"/>
+			<output message="tns:GetPrivateChangesResponse"/>
+		</operation>
+		<operation name="GetPublicChanges">
+			<documentation><xrd:title>GetPublicChanges</xrd:title></documentation>
+			<input message="tns:GetPublicChanges"/>
+			<output message="tns:GetPublicChangesResponse"/>
+		</operation>
+        <!-- Community -->
+		<operation name="AddPersonToCommunityByNameAndAddress">
+			<documentation><xrd:title>AddPersonToCommunityByNameAndAddress</xrd:title></documentation>
+			<input message="tns:AddPersonToCommunityByNameAndAddress"/>
+			<output message="tns:AddPersonToCommunityByNameAndAddressResponse"/>
+		</operation>
+		<operation name="AddPersonToCommunityByNameAndDateOfBirth">
+			<documentation><xrd:title>AddPersonToCommunityByNameAndDateOfBirth</xrd:title></documentation>
+			<input message="tns:AddPersonToCommunityByNameAndDateOfBirth"/>
+			<output message="tns:AddPersonToCommunityByNameAndDateOfBirthResponse"/>
+		</operation>
+		<operation name="RemovePersonsFromCommunity">
+			<documentation><xrd:title>RemovePersonsFromCommunity</xrd:title></documentation>
+			<input message="tns:RemovePersonsFromCommunity"/>
+			<output message="tns:RemovePersonsFromCommunityResponse"/>
+		</operation>
+		<!-- System -->
+		<operation name="GetSystemStatus">
+			<documentation><xrd:title>GetSystemStatus</xrd:title></documentation>
+			<input message="tns:GetSystemStatus"/>
+			<output message="tns:GetSystemStatusResponse"/>
+		</operation>
+		<operation name="RefreshConsumer">
+			<documentation><xrd:title>RefreshConsumer</xrd:title></documentation>
+			<input message="tns:RefreshConsumer"/>
+			<output message="tns:RefreshConsumerResponse"/>
+		</operation>
+	</portType>
+
+	<binding name="UsFolkBinding" type="tns:UsFolkPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<!-- Privileges -->
+		<operation name="GetMyPrivileges">
+			<soap:operation soapAction="GetMyPrivileges" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPrivilegesSmall">
+			<soap:operation soapAction="GetPrivilegesSmall" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPrivilegesMedium">
+			<soap:operation soapAction="GetPrivilegesMedium" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<!-- PersonSmall -->
+		<operation name="GetPersonSmallByPrivateId">
+			<soap:operation soapAction="GetPersonSmallByPrivateId" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonSmallByPtal">
+			<soap:operation soapAction="GetPersonSmallByPtal" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonSmallByNameAndAddress">
+			<soap:operation soapAction="GetPersonSmallByNameAndAddress" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonSmallByNameAndDateOfBirth">
+			<soap:operation soapAction="GetPersonSmallByNameAndDateOfBirth" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<!-- PersonMedium -->
+		<operation name="GetPersonMediumByPrivateId">
+			<soap:operation soapAction="GetPersonMediumByPrivateId" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonMediumByPublicId">
+			<soap:operation soapAction="GetPersonMediumByPublicId" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonMediumByPtal">
+			<soap:operation soapAction="GetPersonMediumByPtal" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonMediumByNameAndAddress">
+			<soap:operation soapAction="GetPersonMediumByNameAndAddress" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPersonMediumByNameAndDateOfBirth">
+			<soap:operation soapAction="GetPersonMediumByNameAndDateOfBirth" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<!-- Changes -->
+		<operation name="GetPrivateChanges">
+			<soap:operation soapAction="GetPrivateChanges" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetPublicChanges">
+			<soap:operation soapAction="GetPublicChanges" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+        <!-- Community -->
+		<operation name="AddPersonToCommunityByNameAndAddress">
+			<soap:operation soapAction="AddPersonToCommunityByNameAndAddress" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="AddPersonToCommunityByNameAndDateOfBirth">
+			<soap:operation soapAction="AddPersonToCommunityByNameAndDateOfBirth" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="RemovePersonsFromCommunity">
+			<soap:operation soapAction="RemovePersonsFromCommunity" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<!-- System -->
+		<operation name="GetSystemStatus">
+			<soap:operation soapAction="GetSystemStatus" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		<operation name="RefreshConsumer">
+			<soap:operation soapAction="RefreshConsumer" style="document"/>
+			<xrd:version>v1</xrd:version>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:xrdheader" part="client" use="literal"/>
+				<soap:header message="tns:xrdheader" part="service" use="literal"/>
+				<soap:header message="tns:xrdheader" part="id" use="literal"/>
+				<soap:header message="tns:xrdheader" part="userId" use="literal"/>
+				<soap:header message="tns:xrdheader" part="issue" use="literal"/>
+				<soap:header message="tns:xrdheader" part="protocolVersion" use="literal"/>
+			</output>
+		</operation>
+		
+	</binding>
+	<service name="UsFolkService">
+		<port name="UsFolkPort" binding="tns:UsFolkBinding">
+			<soap:address location="http://consumer-ip/cgi-bin/consumer_proxy/"/>
+			<xrd:title>UsFolkV3 Producer</xrd:title>
+			<xrd:address producer="us-folk-v3"/>
+		</port>
+	</service>
+</definitions>

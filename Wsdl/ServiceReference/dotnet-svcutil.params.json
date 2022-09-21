@@ -1,0 +1,15 @@
+{
+  "providerId": "Microsoft.Tools.ServiceModel.Svcutil",
+  "version": "2.0.3",
+  "options": {
+    "inputs": [
+      "../us-folk-v3.wsdl"
+    ],
+    "namespaceMappings": [
+      "*, Eu.Xroad.UsFolkV3.Producer"
+    ],
+    "outputFile": "Reference.cs",
+    "targetFramework": "net6.0",
+    "typeReuseMode": "All"
+  }
+}
