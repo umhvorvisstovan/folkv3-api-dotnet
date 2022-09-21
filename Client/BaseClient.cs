@@ -289,11 +289,3 @@ public abstract class BaseClient
         }
     }
 }
-
-public class CustCertValidator : X509CertificateValidator
-{
-    public override void Validate(X509Certificate2 certificate)
-    {
-        
-    }
-}
