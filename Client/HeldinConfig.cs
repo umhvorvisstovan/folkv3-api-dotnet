@@ -169,7 +169,7 @@ public class HeldinConfig
             var memberCode = parts[2];
             var subSystemCode = parts[3];
             var envSepIdx = xRoadInstance.IndexOf('-');
-            var env = envSepIdx == -1 ? "" : xRoadInstance.Substring(envSepIdx + 1);
+            var env = envSepIdx == -1 ? "PROD" : xRoadInstance.Substring(envSepIdx + 1);
             var xRoadInstancePrefix = envSepIdx == -1 ? xRoadInstance : xRoadInstance.Substring(0, envSepIdx);
             return new Identifier(xRoadInstancePrefix, env, memberClass, memberCode, subSystemCode);
         }
